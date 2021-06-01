@@ -31,8 +31,20 @@ namespace Chat.SocketsManager
 
             await webSocket.SendAsync(new System.ArraySegment<byte>(Encoding.ASCII.GetBytes(message), 0, message.Length)
                 , WebSocketMessageType.Text, true, CancellationToken.None);
-
         }
 
+        public async Task sendMessage(string id, string message)
+        {
+            await sendMessage(Connections.getSocketById(id), message);
+        }
+
+        public async Task sendMessageToAll(string message)
+        {
+            foreach (var c in Connections.getAllConnections())            
+                await sendMessage(c.Value, message);            
+        }
+
+        public abstract Task Receive(WebSocket webSocket, WebSocketReceiveResult result, byte[] buffer);        
     }
 }
+
