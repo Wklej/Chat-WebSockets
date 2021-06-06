@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Chat.SocketsManager
@@ -15,6 +17,11 @@ namespace Chat.SocketsManager
                     services.AddSingleton(item);
             }
             return services;
+        }
+
+        public static IApplicationBuilder MapSockets(this IApplicationBuilder app, PathString path, SocketHandler socket)
+        {
+            return app.Map(path, (x) => x.UseMiddleware<SocketMiddleware>(socket));
         }
     }
 }
