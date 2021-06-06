@@ -24,6 +24,9 @@ namespace Chat.SocketsManager
                 return;
 
             var socket = await context.WebSockets.AcceptWebSocketAsync();
+
+            await Handler.onConnected(socket);
+
             await Receive(socket, async (result, buffer) => 
             { 
                 if(result.MessageType == WebSocketMessageType.Text)
